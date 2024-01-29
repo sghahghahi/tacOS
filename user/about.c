@@ -8,6 +8,7 @@ int main(void)
 	printf("--------------------------\n");
 	printf("Author: Shyon Ghahghahi\n");
 	printf("USF Username: sghahghahi2\n");
-	
+	printf("About: Welcome to tacOS, a byte-size operating system!\n");
+
 	return 0;
 }
