@@ -63,22 +63,85 @@ strchr(const char *s, char c)
   return 0;
 }
 
+/**
+ * @brief This function reads buffer_size number of characters from any input source
+ * @param file_descriptor Identifies opened file
+ * @param *buffer Buffer where we will write data into
+ * @param buffer_size Size of the buffer
+ * @return Total number of characters read or -1 for error
+*/
+int
+fgets(int file_descriptor, char *buffer, uint buffer_size)
+{
+  int total_chars_read = 0;
+  int curr_chars_read = 0;
+  int i;
+  char curr_char;
+
+  for (i = 0; i + 1 < buffer_size; i++) { // i + 1 to ensure space for the null byte
+    curr_chars_read = read(file_descriptor, &curr_char, 1);
+    if (curr_chars_read < 1) break;
+
+    total_chars_read++;
+    if (curr_char == '\n' || curr_char == '\r') break;
+
+    *(buffer + i) = curr_char;
+  }
+
+  *(buffer + i) = '\0';
+  if (curr_chars_read == -1) return -1;
+
+  return total_chars_read;
+}
+
 char*
 gets(char *buf, int max)
 {
-  int i, cc;
-  char c;
-
-  for(i=0; i+1 < max; ){
-    cc = read(0, &c, 1);
-    if(cc < 1)
-      break;
-    buf[i++] = c;
-    if(c == '\n' || c == '\r')
-      break;
-  }
-  buf[i] = '\0';
+  fgets(0, buf, max);
   return buf;
+}
+
+/**
+ * @brief This function reads one whole line at a time. Will write file contents to
+ * a buffer and print the buffer. Will allocate more memory for the buffer if needed.
+ * @param **buffer Pointer to buffer where we will write to
+ * @param *buffer_size Size of buffer
+ * @param file_descriptor Identifies open file
+ * @return Number of characters read or -1 for error
+*/
+int
+getline(char **buffer, uint *buffer_size, int file_descriptor)
+{
+  int bytes_read = 0;
+  int total_bytes_read = 0;
+  char last_char;
+
+  if (*buffer == NULL || *buffer_size == 0) {
+    *buffer_size = 16;
+    *buffer = (char *) malloc(*buffer_size);
+    if (*buffer == NULL) return -1;
+  }
+
+  bytes_read = fgets(file_descriptor, *buffer, *buffer_size);
+  while (bytes_read > 0) {
+    total_bytes_read += bytes_read;
+    last_char = *(*(buffer) + *buffer_size - 2); // Last readable char -> last char is null byte
+    if (last_char == '\n' || last_char == '\0') return total_bytes_read;
+
+    /* Double size of buffer */
+    *buffer_size *= 2;
+    char *resized_buffer = (char *) malloc(*buffer_size);
+    if (resized_buffer == NULL) return -1;
+
+    memcpy(resized_buffer, *buffer, total_bytes_read);
+    free(*buffer);
+
+    /* Start writing to end of current buffer. Only write to remaining number of bytes in buffer -> prevents buffer overflow */
+    bytes_read = fgets(file_descriptor, resized_buffer + total_bytes_read, *buffer_size - total_bytes_read);
+    *buffer = resized_buffer;
+  }
+
+  return bytes_read; // Will always be 0 here -> we only get here if while loop condition fails
 }
 
 int
