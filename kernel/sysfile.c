@@ -15,6 +15,7 @@
 #include "sleeplock.h"
 #include "file.h"
 #include "fcntl.h"
+#include "memlayout.h"
 
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.
@@ -85,7 +86,7 @@ sys_write(void)
   struct file *f;
   int n;
   uint64 p;
-  
+
   argaddr(1, &p);
   argint(2, &n);
   if(argfd(0, 0, &f) < 0)
@@ -412,7 +413,7 @@ sys_chdir(void)
   char path[MAXPATH];
   struct inode *ip;
   struct proc *p = myproc();
-  
+
   begin_op();
   if(argstr(0, path, MAXPATH) < 0 || (ip = namei(path)) == 0){
     end_op();
@@ -501,5 +502,23 @@ sys_pipe(void)
     fileclose(wf);
     return -1;
   }
+  return 0;
+}
+
+uint64
+sys_reboot(void)
+{
+  volatile uint32 *test_dev = (uint32 *) VIRT_TEST;
+  *test_dev = 0x7777;
+
+  return 0;
+}
+
+uint64
+sys_shutdown(void)
+{
+  volatile uint32 *test_dev = (uint32 *) VIRT_TEST;
+  *test_dev = 0x5555;
+
   return 0;
 }

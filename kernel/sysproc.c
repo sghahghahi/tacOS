@@ -89,3 +89,12 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// System call to get current timestamp
+uint64
+sys_time(void)
+{
+  volatile uint64 *timestamp = (uint64 *) GOLDFISH_RTC;
+
+  return *timestamp / 1000000000;
+}

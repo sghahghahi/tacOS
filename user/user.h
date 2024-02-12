@@ -35,6 +35,9 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+uint64 reboot(void);
+uint64 shutdown(void);
+uint64 time(void);
 
 // ulib.c
 int stat(const char*, struct stat*);
