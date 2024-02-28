@@ -104,6 +104,7 @@ extern uint64 sys_close(void);
 extern uint64 sys_reboot(void);
 extern uint64 sys_shutdown(void);
 extern uint64 sys_time(void);
+extern uint64 sys_strace(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -132,6 +133,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_reboot]  sys_reboot,
 [SYS_shutdown]sys_shutdown,
 [SYS_time]    sys_time,
+[SYS_strace]  sys_strace,
 };
 
 void

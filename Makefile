@@ -134,13 +134,14 @@ UPROGS=\
 	$U/_shutdown\
 	$U/_stressfs\
 	$U/_time\
+	$U/_tracer\
 	$U/_usertests\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
 
-fs.img: mkfs/mkfs README.md $(UPROGS)
-	mkfs/mkfs fs.img README.md $(UPROGS)
+fs.img: mkfs/mkfs README.md roll.txt $(UPROGS)
+	mkfs/mkfs fs.img README.md roll.txt $(UPROGS)
 
 -include kernel/*.d user/*.d
 

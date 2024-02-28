@@ -38,6 +38,7 @@ int uptime(void);
 uint64 reboot(void);
 uint64 shutdown(void);
 uint64 time(void);
+uint64 strace(void);
 
 // ulib.c
 int stat(const char*, struct stat*);

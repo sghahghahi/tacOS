@@ -1,0 +1,96 @@
+Command: ls
+New system calls:
+	* execve
+	* openat
+	* mmap
+	* newfstatat
+	* close
+	* read
+	* getdents64
+	* write
+	* ioctl
+	* access
+	* prctl
+	* munmap
+	* brk
+	* statfs
+	* arch_prctl
+	* futex
+	* getrandom
+	* mprotect
+	* pread64
+	* set_tid_address
+	* set_robust_list
+	* prlimit64
+	* rseq
+
+23 syscalls
+
+Command: cat /etc/DIR_COLORS
+New system calls:
+	* fadvise64
+
+Command: make clean
+New system calls:
+	* wait4
+	* fcntl
+	* clone3
+	* rt_sigaction
+	* readlink
+	* rt_sigprocmask
+	* getgid
+	* geteuid
+	* getuid
+	* getegid
+	* getcwd
+
+Command: ping google.com
+New system calls:
+	* sendto
+	* socket
+	* connect
+	* poll
+	* recvmsg
+	* setsockopt
+	* recvfrom
+	* sendmmsg
+	* capget
+	* lseek
+	* getsockname
+	* bind
+	* getsockopt
+	* capset
+	* setuid
+
+Command: pwd
+New system calls:
+	* clock_nanosleep
+
+Overlapping system calls:
+	* exec
+	* open
+	* read
+	* write
+	* wait
+	* sleep
+
+Non-overlapping system calls:
+	* fork
+	* exit
+	* pipe
+	* kill
+	* fstat
+	* chdir
+	* dup
+	* getpid
+	* sbrk
+	* uptime
+	* mknod
+	* unlink
+	* link
+	* mkdir
+	* close
+	* reboot
+	* shutdown
+	* time
+	* strace

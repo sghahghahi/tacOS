@@ -23,3 +23,4 @@
 #define SYS_reboot 22
 #define SYS_shutdown 23
 #define SYS_time 24
+#define SYS_strace 25

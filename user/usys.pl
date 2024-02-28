@@ -39,3 +39,4 @@ entry("uptime");
 entry("reboot");
 entry("shutdown");
 entry("time");
+entry("strace");
