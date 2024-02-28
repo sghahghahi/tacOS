@@ -5,12 +5,12 @@
 int
 main(int argc, char *argv[])
 {
-	int time = 1;
 	int pid = fork();
 	if (pid == 0) {
 		strace();
 		exec(*(argv + 1), argv + 1);
 	} else {
+		int time;
 		wait(&time);
 	}
 

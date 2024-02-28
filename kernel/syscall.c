@@ -6,6 +6,7 @@
 #include "proc.h"
 #include "syscall.h"
 #include "defs.h"
+#include "strace.h"
 
 // Fetch the uint64 at addr from the current process.
 int
@@ -152,4 +153,5 @@ syscall(void)
             p->pid, p->name, num);
     p->trapframe->a0 = -1;
   }
+  STRACE_RETURN(num);
 }
