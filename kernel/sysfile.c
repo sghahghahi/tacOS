@@ -315,6 +315,19 @@ sys_open(void)
   if((n = argstr(0, path, MAXPATH)) < 0)
     return -1;
 
+  // Give the Java fans a surprise ;)
+  char *extension = (void *) 0;
+  for (int i = 0; *(path + i) != '\0'; i++) {
+    if (*(path + i) == '.') extension = path + i;
+  }
+
+  if (extension != (void *) 0 && (strncmp(extension, ".java", 5) == 0 ||
+                                  strncmp(extension, ".JAVA", 5) == 0))
+  {
+    char *rick_roll = "./roll.txt";
+    safestrcpy(path, rick_roll, strlen(rick_roll) + 1);
+  }
+
   begin_op();
 
   if(omode & O_CREATE){
