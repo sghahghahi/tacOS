@@ -5,7 +5,7 @@
 int
 main(void)
 {
-	uint64 timestamp = time();
+	uint64 timestamp = time() / 1000000000;
 	printf("Current UNIX timestamp: %d\n", timestamp);
 
 	return 0;

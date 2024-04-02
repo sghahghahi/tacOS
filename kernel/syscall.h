@@ -24,3 +24,4 @@
 #define SYS_shutdown 23
 #define SYS_time 24
 #define SYS_strace 25
+#define SYS_wait2 26

@@ -33,6 +33,16 @@ sys_fork(void)
 }
 
 uint64
+sys_wait2(void)
+{
+  uint64 p;
+  argaddr(0, &p);
+  uint64 sys_count;
+  argaddr(1, &sys_count);
+  return wait2(p, sys_count);
+}
+
+uint64
 sys_wait(void)
 {
   uint64 p;
@@ -110,7 +120,7 @@ sys_time(void)
 
   volatile uint64 *timestamp = (uint64 *) GOLDFISH_RTC;
 
-  return *timestamp / 1000000000;
+  return *timestamp;
 }
 
 uint64

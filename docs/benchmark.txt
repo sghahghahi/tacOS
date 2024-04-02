@@ -1,0 +1,8 @@
+# /benchmark catlines time-machine.txt
+# opt1: read more data into buffer (was previously reading 1 character at a time)
+# opt2: increase buffer size to reduce amount of read()s
+
+@ Time,Syscalls
+base	17828	51716
+opt1	8155	28740
+opt2	6862	28579

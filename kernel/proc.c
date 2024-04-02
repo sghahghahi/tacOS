@@ -169,6 +169,7 @@ freeproc(struct proc *p)
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;
+  p->syscall_count = 0;
 }
 
 // Create a user page table for a given process, with no user memory,
@@ -385,10 +386,8 @@ exit(int status)
   panic("zombie exit");
 }
 
-// Wait for a child process to exit and return its pid.
-// Return -1 if this process has no children.
 int
-wait(uint64 addr)
+wait2(uint64 addr, uint64 syscall_count)
 {
   struct proc *pp;
   int havekids, pid;
@@ -396,24 +395,30 @@ wait(uint64 addr)
 
   acquire(&wait_lock);
 
-  for(;;){
-    // Scan through table looking for exited children.
+  while (1) {
     havekids = 0;
-    for(pp = proc; pp < &proc[NPROC]; pp++){
-      if(pp->parent == p){
-        // make sure the child isn't still in exit() or swtch().
+    for (pp = proc; pp < &proc[NPROC]; pp++) {
+      if (pp->parent == p) {
         acquire(&pp->lock);
 
         havekids = 1;
-        if(pp->state == ZOMBIE){
-          // Found one.
+        if (pp->state == ZOMBIE) {
           pid = pp->pid;
-          if(addr != 0 && copyout(p->pagetable, addr, (char *)&pp->xstate,
-                                  sizeof(pp->xstate)) < 0) {
-            release(&pp->lock);
-            release(&wait_lock);
-            return -1;
+          if (addr != 0 && copyout(p->pagetable, addr, (char *) &pp->xstate,
+                                   sizeof(pp->xstate)) < 0) {
+              release(&pp->lock);
+              release(&wait_lock);
+              return -1;
           }
+
+          // Don't need to check if addr != 0 because we already checked above
+          if (syscall_count && copyout(p->pagetable, syscall_count, (char *) &pp->syscall_count,
+                                       sizeof(pp->syscall_count)) < 0) {
+              release(&pp->lock);
+              release(&wait_lock);
+              return -1;
+          }
+
           freeproc(pp);
           release(&pp->lock);
           release(&wait_lock);
@@ -423,15 +428,21 @@ wait(uint64 addr)
       }
     }
 
-    // No point waiting if we don't have any children.
-    if(!havekids || killed(p)){
+    if (!havekids || killed(p)) {
       release(&wait_lock);
       return -1;
     }
-    
-    // Wait for a child to exit.
-    sleep(p, &wait_lock);  //DOC: wait-sleep
+
+    sleep(p, &wait_lock);
   }
+}
+
+// Wait for a child process to exit and return its pid.
+// Return -1 if this process has no children.
+int
+wait(uint64 addr)
+{
+  return wait2(addr, 0);
 }
 
 // Per-CPU process scheduler.

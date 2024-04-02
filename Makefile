@@ -117,8 +117,10 @@ mkfs/mkfs: mkfs/mkfs.c $K/fs.h $K/param.h
 
 UPROGS=\
 	$U/_about\
+	$U/_benchmark\
 	$U/_broken\
 	$U/_cat\
+	$U/_catlines\
 	$U/_echo\
 	$U/_forktest\
 	$U/_getline\
@@ -131,6 +133,7 @@ UPROGS=\
 	$U/_reboot\
 	$U/_rm\
 	$U/_sh\
+	$U/_shim\
 	$U/_shutdown\
 	$U/_stressfs\
 	$U/_time\
@@ -140,8 +143,8 @@ UPROGS=\
 	$U/_wc\
 	$U/_zombie\
 
-fs.img: mkfs/mkfs README.md roll.txt $(UPROGS)
-	mkfs/mkfs fs.img README.md roll.txt $(UPROGS)
+fs.img: mkfs/mkfs README.md roll.txt time-machine.txt test.sh $(UPROGS)
+	mkfs/mkfs fs.img README.md roll.txt time-machine.txt test.sh $(UPROGS)
 
 -include kernel/*.d user/*.d
 

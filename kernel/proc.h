@@ -105,4 +105,5 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
   int strace;                  // Flag to turn tracing on/off
+  long syscall_count;          // Keeps running count of system calls used
 };

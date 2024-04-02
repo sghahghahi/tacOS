@@ -39,6 +39,7 @@ uint64 reboot(void);
 uint64 shutdown(void);
 uint64 time(void);
 uint64 strace(void);
+int wait2(int*, int*);
 
 // ulib.c
 int stat(const char*, struct stat*);
@@ -58,3 +59,7 @@ void free(void*);
 int atoi(const char*);
 int memcmp(const void *, const void *, uint);
 void *memcpy(void *, const void *, uint);
+uint strspn(const char*, const char*);
+uint strcspn(const char*, const char*);
+char* next_token(char**, const char*);
+

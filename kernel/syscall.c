@@ -106,6 +106,7 @@ extern uint64 sys_reboot(void);
 extern uint64 sys_shutdown(void);
 extern uint64 sys_time(void);
 extern uint64 sys_strace(void);
+extern uint64 sys_wait2(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -135,6 +136,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_shutdown]sys_shutdown,
 [SYS_time]    sys_time,
 [SYS_strace]  sys_strace,
+[SYS_wait2]   sys_wait2,
 };
 
 void
@@ -148,6 +150,7 @@ syscall(void)
     // Use num to lookup the system call function for num, call it,
     // and store its return value in p->trapframe->a0
     p->trapframe->a0 = syscalls[num]();
+    p->syscall_count++;
   } else {
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);
