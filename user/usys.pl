@@ -41,3 +41,4 @@ entry("shutdown");
 entry("time");
 entry("strace");
 entry("wait2");
+entry("getcwd");

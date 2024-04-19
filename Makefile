@@ -122,14 +122,17 @@ UPROGS=\
 	$U/_cat\
 	$U/_catlines\
 	$U/_echo\
+	$U/_fnr\
 	$U/_forktest\
 	$U/_getline\
 	$U/_grep\
 	$U/_init\
 	$U/_kill\
+	$U/_leetify\
 	$U/_ln\
 	$U/_ls\
 	$U/_mkdir\
+	$U/_pwd\
 	$U/_reboot\
 	$U/_rm\
 	$U/_sh\
@@ -137,14 +140,15 @@ UPROGS=\
 	$U/_shutdown\
 	$U/_stressfs\
 	$U/_time\
+	$U/_tolower\
 	$U/_tracer\
 	$U/_usertests\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
 
-fs.img: mkfs/mkfs README.md roll.txt time-machine.txt test.sh $(UPROGS)
-	mkfs/mkfs fs.img README.md roll.txt time-machine.txt test.sh $(UPROGS)
+fs.img: mkfs/mkfs README.md roll.txt time-machine.txt input.txt 1.sh 2.sh 3.sh 4.sh script.sh $(UPROGS)
+	mkfs/mkfs fs.img README.md roll.txt time-machine.txt input.txt 1.sh 2.sh 3.sh 4.sh script.sh $(UPROGS)
 
 -include kernel/*.d user/*.d
 

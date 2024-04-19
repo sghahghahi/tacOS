@@ -208,3 +208,71 @@ memcpy(void *dst, const void *src, uint n)
 {
   return memmove(dst, src, n);
 }
+
+uint
+strspn(const char *str, const char *chars)
+{
+  uint i, j;
+  for (i = 0; str[i] != '\0'; i++) {
+    for (j = 0; chars[j] != str[i]; j++) {
+      if (chars[j] == '\0')
+        return i;
+    }
+  }
+  return i;
+}
+
+uint
+strcspn(const char *str, const char *chars)
+{
+  const char *p, *sp;
+  char c, sc;
+  for (p = str;;) {
+    c = *p++;
+    sp = chars;
+    do {
+      if ((sc = *sp++) == c) {
+        return (p - 1 - str);
+      }
+    } while (sc != 0);
+  }
+}
+
+char
+*next_token(char **str_ptr, const char *delim)
+{
+  if (*str_ptr == NULL) {
+    return NULL;
+  }
+
+  uint tok_start = strspn(*str_ptr, delim);
+  uint tok_end = strcspn(*str_ptr + tok_start, delim);
+
+  /* Zero length token. We must be finished. */
+  if (tok_end  == 0) {
+    *str_ptr = NULL;
+    return NULL;
+  }
+
+  /* Take note of the start of the current token. We'll return it later. */
+  char *current_ptr = *str_ptr + tok_start;
+
+  /* Shift pointer forward (to the end of the current token) */
+  *str_ptr += tok_start + tok_end;
+
+  if (**str_ptr == '\0') {
+    /* If the end of the current token is also the end of the string, we
+         * must be at the last token. */
+    *str_ptr = NULL;
+  } else {
+    /* Replace the matching delimiter with a NUL character to terminate the
+         * token string. */
+    **str_ptr = '\0';
+
+    /* Shift forward one character over the newly-placed NUL so that
+         * next_pointer now points at the first character of the next token. */
+    (*str_ptr)++;
+  }
+
+  return current_ptr;
+}

@@ -39,6 +39,27 @@ exec(char *path, char **argv)
   }
   ilock(ip);
 
+  // Check for shebang '#!'
+  char buf[MAXPATH];
+  if (readi(ip, 0, (uint64) buf, 0, 2) == 2) {
+    if (buf[0] == '#' && buf[1] == '!') {
+      // We're in business
+      int bytes_read = readi(ip, 0, (uint64) buf, 2, MAXPATH);
+      if (bytes_read > 0 && bytes_read < MAXPATH) {
+        int i = -1;
+        while (buf[++i] != '\n'); // Find '\n' so we can replace it with '\0'
+        buf[i] = '\0';
+      }
+
+      char *interpreter = buf;
+      // Populate argv
+
+      iunlockput(ip);
+      end_op();
+      return exec(interpreter, argv);
+    }
+  }
+
   // Check ELF header
   if(readi(ip, 0, (uint64)&elf, 0, sizeof(elf)) != sizeof(elf))
     goto bad;

@@ -25,3 +25,4 @@
 #define SYS_time 24
 #define SYS_strace 25
 #define SYS_wait2 26
+#define SYS_getcwd 27
