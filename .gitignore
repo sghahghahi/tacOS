@@ -16,3 +16,7 @@ kernel/kernel
 user/usys.S
 .gdbinit
 .vscode/
+fs/
+my-disk
+user/umalloc_backup.c
+.gitignore
