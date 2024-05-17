@@ -2,11 +2,8 @@
 #include "user/user.h"
 
 #define MAX_NAME 8
-#define PAGE_SZ 4096
 #define MIN_DATA 16
 #define HEADER_SZ 32
-#define FREE true
-#define BLOCK false
 
 /* Structs */
 typedef struct DoublyLinkedList {
@@ -23,9 +20,13 @@ struct BlockHeader {
 };
 
 /* Functions */
-void addList(struct BlockHeader*, bool);
+void removeFreeList(struct BlockHeader*);
+void addFreeList(struct BlockHeader*);
+void addBlockList(struct BlockHeader*);
 uint findNearestMultiple(uint);
 bool isFree(struct BlockHeader*);
 void mallocPrint(void);
 void myStrncpy(char*, const char*, uint);
-void setName(struct BlockHeader*, const char*);
+void setName(void*, const char*);
+void* calloc(uint, uint);
+void* firstFit(uint);
